@@ -76,7 +76,7 @@ jobs:
         with:
           ruby-version: "3.3.5"
           bundler-cache: false
-        run : | 
+        run: | 
           bundle config set frozen false
           bundle install
       - name: Setup Python 🐍
