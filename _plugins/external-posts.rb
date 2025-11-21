@@ -29,6 +29,26 @@ module ExternalPosts
       process_entries(site, src, feed.entries)
     end
 
+    def fetch_from_rss(site, src)
+      response = HTTParty.get(src['rss_url'])
+      puts "Fetching feed from: #{src['rss_url']}"
+      puts "HTTP response code: #{response.code}"
+      puts "Content-Type: #{response.headers['content-type']}"
+  
+      xml = response.body
+      return if xml.nil? || xml.empty?
+
+      # Print first 500 characters of the feed for debugging
+      puts "Feed XML snippet: #{xml[0..500]}"
+
+      begin
+        feed = Feedjira.parse(xml)
+        process_entries(site, src, feed.entries)
+      rescue Feedjira::NoParserAvailable => e
+        puts "Feedjira could not parse the feed at #{src['rss_url']}: #{e.message}"
+      end
+    end
+
     def process_entries(site, src, entries)
       entries.each do |e|
         puts "...fetching #{e.url}"
