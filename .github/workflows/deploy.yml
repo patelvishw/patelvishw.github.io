@@ -73,8 +73,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          bundle install
           bundle config set frozen false
+          bundle install
       - name: Setup Ruby 💎
         uses: ruby/setup-ruby@v1
         with:
